@@ -1,0 +1,2 @@
+set(BRANDING_PRODUCT_NAME desurium)
+

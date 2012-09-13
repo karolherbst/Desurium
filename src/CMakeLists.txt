@@ -9,6 +9,18 @@ file(COPY ${BRANDING} DESTINATION ${BIN_INCLUDE_DIR})
 file(REMOVE_RECURSE ${BIN_INCLUDE_DIR}/branding)
 file(RENAME ${BIN_INCLUDE_DIR}/${BRANDING} ${BIN_INCLUDE_DIR}/branding)
 
+# include the branding information file
+include(${BIN_INCLUDE_DIR}/branding/branding.cmake)
+
+# check if we got all the information we need
+foreach(var
+  BRANDING_PRODUCT_NAME)
+  
+  if(NOT DEFINED ${var})
+    message(FATAL_ERROR "the variable ${var} has to be set by branding")
+  endif()
+endforeach()
+
 set(BR ${BIN_INCLUDE_DIR}/branding)
 set(APP ${BR}/data/themes/default/images/app)
 
