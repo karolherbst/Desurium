@@ -82,7 +82,7 @@ install(FILES ${IMAGES}
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/run.sh ${CMAKE_GEN_SRC_DIR}/build_out/run.sh @ONLY)
 install(FILES ${CMAKE_GEN_SRC_DIR}/build_out/run.sh
-        RENAME desura
+        RENAME ${BRANDING_PRODUCT_NAME}
         DESTINATION ${BIN_INSTALL_DIR}
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                     GROUP_READ             GROUP_EXECUTE

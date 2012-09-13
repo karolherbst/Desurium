@@ -5,8 +5,8 @@ include_directories(
 
 file(GLOB Sources code/*.cpp )
 
-add_executable(desura ${Sources})
-target_link_libraries(desura
+add_executable(${BRANDING_PRODUCT_NAME} ${Sources})
+target_link_libraries(${BRANDING_PRODUCT_NAME}
   dl
   mdump
   rt
@@ -21,5 +21,5 @@ target_link_libraries(desura
   ${LIBNOTIFY_LIBRARIES}
 )
 
-install(TARGETS desura
+install(TARGETS ${BRANDING_PRODUCT_NAME}
         DESTINATION "${LIB_INSTALL_DIR}")
