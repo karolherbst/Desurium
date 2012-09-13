@@ -171,6 +171,7 @@ foreach(item ${DESURA_SYMLINK_RULES})
   endif()
 endforeach()
 
+add_subdirectory(data)
 
 ###############################################################################
 # we need some dependencies 
