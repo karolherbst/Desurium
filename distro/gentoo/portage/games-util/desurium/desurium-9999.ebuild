@@ -107,6 +107,12 @@ COMMON_DEPEND="
 "
 
 RDEPEND="
+	x86? (
+		www-plugins/adobe-flash[32bit]
+	)
+	amd64? (
+		www-plugins/adobe-flash[64bit]
+	)
 	media-libs/desurium-cef
 	x11-misc/xdg-user-dirs
 	x11-misc/xdg-utils
