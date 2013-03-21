@@ -435,7 +435,7 @@ void MainApp::processCrash(CrashArg_s* args)
 	
 	if (pid1 == 0)
 	{
-		execl("bin/crashdlg", "bin/crashdlg", m_Argv, NULL);
+		execl("crashdlg", "crashdlg", m_Argv, NULL);
 	}
 	else
 	{
