@@ -123,6 +123,7 @@ endif()
 
 if(NOT WIN32)
   set(REQUIRED_ON_UNIX REQUIRED)
+  find_package(GTK2 REQUIRED)
 endif()
 
 if(NOT BUILD_ONLY_CEF)
@@ -145,7 +146,6 @@ if(NOT BUILD_ONLY_CEF)
   endif()
 
   if(NOT WIN32)
-    find_package(GTK2 REQUIRED)
     find_package(X11 REQUIRED)
     if(NOT X11_Xt_FOUND)
       message(FATAL_ERROR "libXt is required")
@@ -329,9 +329,10 @@ if(NOT BUILD_ONLY_CEF)
   if(WITH_FLASH AND NOT WIN32)
     add_subdirectory(third_party/npwrapper)
   endif()
-  ###############################################################################
-  # build desura
-  ###############################################################################
-  add_subdirectory(src)
   add_subdirectory(build_out)
 endif()
+
+###############################################################################
+# build desura
+###############################################################################
+add_subdirectory(src)

@@ -1,7 +1,6 @@
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/code
   ${Boost_INCLUDE_DIR}
-  ${CEF_INCLUDE_DIRS}
   ${IPC_PIPE_INCLUDE_DIRS}
   ${SQLITE3X_INCLUDE_DIRS}
 )

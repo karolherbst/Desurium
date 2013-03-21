@@ -3,7 +3,6 @@ include_directories(
   ${COMMON_INCLUDE_DIRS}/service_pipe
   ${COMMON_INCLUDE_DIRS}/tool_pipe
   ${Boost_INCLUDE_DIR}
-  ${CEF_INCLUDE_DIRS}
   ${IPC_PIPE_INCLUDE_DIRS}
   ${SQLITE3X_INCLUDE_DIRS}
 )

@@ -1,3 +1,8 @@
+# we need them always
+set(GLOBAL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(COMMON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/common)
+
+if(NOT BUILD_ONLY_CEF)
 ###############################################################################
 # copy branding
 ###############################################################################
@@ -39,9 +44,6 @@ endif()
 ###############################################################################
 # do final steps for setting up the desura build environment
 ###############################################################################
-
-set(GLOBAL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include)
-set(COMMON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 if(ICC)
   # on ICC we have to include glib-2 because of some hacks in Common.h
@@ -177,16 +179,6 @@ endforeach()
 # we need some dependencies 
 ###############################################################################
 
-add_dependencies(gcJSBase fetch_cef)
-add_dependencies(scriptengine fetch_cef)
-add_dependencies(servicecore fetch_cef)
-add_dependencies(uicore fetch_cef)
-add_dependencies(usercore fetch_cef)
-if(WIN32)
-  add_dependencies(desura_browserhost fetch_cef)
-  add_dependencies(utilcore fetch_cef)
-endif()
-
 #if(NOT wxWidgets_FOUND)
   add_dependencies(managers_window wxWidget-2-9)
   add_dependencies(wx_controls wxWidget-2-9)
@@ -227,4 +219,11 @@ endif()
 if(NOT V8_FOUND)
   add_dependencies(scriptcore v8)
   add_dependencies(scriptengine v8)
+endif()
+
+endif()
+
+if(BUILD_CEF OR BUILD_ONLY_CEF)
+  add_subdirectory(shared/cef_desura)
+  add_dependencies(cef_desura cef)
 endif()

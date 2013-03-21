@@ -1,6 +1,5 @@
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CEF_INCLUDE_DIRS}
   ${V8_INCLUDE_DIR}
 )
 

@@ -1,7 +1,3 @@
-include_directories(
-    ${CEF_INCLUDE_DIRS}
-)
-
 file (GLOB Sources gcJSBase.cpp)
 file (GLOB Common Common.cpp)
 
