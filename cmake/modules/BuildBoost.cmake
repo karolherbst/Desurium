@@ -2,6 +2,11 @@ if(MINGW)
   set(CONFIGURE_COMMAND "./bootstrap.sh")
   set(BJAM_BINARY "./bjam.exe")
   set(BOOST_EXTRA_BUILD_OPTS "--with-toolset=mingw")
+elseif(APPLE)
+  set(CONFIGURE_COMMAND "./bootstrap.sh")
+  set(BJAM_BINARY "./bjam")
+  set(BOOST_EXTRA_BUILD_OPTS --with-toolset=clang)
+  set(EXTRA_BJAM_OPTS cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++")
 else()
   set(CONFIGURE_COMMAND "bootstrap.bat")
   set(BJAM_BINARY "b2.exe")
@@ -18,7 +23,7 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ${CONFIGURE_COMMAND} ${BOOST_EXTRA_BUILD_OPTS}
   BUILD_COMMAND ${BJAM_BINARY} --layout=system --with-date_time --with-filesystem
                   --with-thread --with-system --with-test variant=debug link=static
-				  threading=multi runtime-link=shared
+				  threading=multi runtime-link=shared ${EXTRA_BJAM_OPTS}
   INSTALL_COMMAND ""
 )
 else()
@@ -31,7 +36,7 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ${CONFIGURE_COMMAND} ${BOOST_EXTRA_BUILD_OPTS}
   BUILD_COMMAND ${BJAM_BINARY} --layout=system --with-date_time --with-filesystem
                   --with-thread --with-system --with-test variant=release link=static
-				  threading=multi runtime-link=shared 
+				  threading=multi runtime-link=shared ${EXTRA_BJAM_OPTS}
   INSTALL_COMMAND ""
 )
 endif()
@@ -45,7 +50,7 @@ set(Boost_DIR ${source_dir})
 set(Boost_INCLUDE_DIR ${Boost_DIR})
 set(Boost_LIBRARY_DIR ${Boost_DIR}/stage/lib)
 
-if(MINGW)
+if(MINGW OR APPLE)
   set(BOOST_SUFFIX a)
 else()
   set(BOOST_SUFFIX lib)
