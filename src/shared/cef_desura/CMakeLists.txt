@@ -20,9 +20,11 @@ file(GLOB Sources
 )
 
 add_definitions(-DBUILDING_CEF_SHARED -DIGNORE_C_API -std=c++98)
+add_linker_flags(-Wl,-z,defs)
 
 add_library(cef_desura SHARED ${Sources})
 target_link_libraries(cef_desura
+  ${GTK2_LIBRARIES}
   ${CEF_LIBRARIES}
 )
 
