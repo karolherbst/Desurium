@@ -97,6 +97,7 @@ if(WIN32)
 endif()
 add_subdirectory(shared/usercore)
 add_subdirectory(shared/webcore)
+add_subdirectory(shared/overlay)
 
 ###############################################################################
 # build the client
