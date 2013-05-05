@@ -7,6 +7,8 @@ file(GLOB Sources code/*.cpp )
 
 if(WITH_BREAKPAD)
   set(MDUMP mdump)
+else()
+  set(MDUMP stackdumper)
 endif()
 
 add_executable(desura ${Sources})
