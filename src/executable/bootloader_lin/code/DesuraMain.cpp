@@ -31,6 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include "UICoreI.h" // UICoreI
 #ifdef WITH_BREAKPAD
   #include "MiniDumpGenerator.h"
+#else
+  #include "StackDumper.h"
 #endif
 
 #include "DesuraMain.h"
@@ -49,8 +51,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 MainApp* g_pMainApp;
 #ifdef WITH_BREAKPAD
   SharedObjectLoader g_CrashObject;
+  UploadCrashFn g_UploadCrashfn;
 #endif
-UploadCrashFn g_UploadCrashfn;
 
 void SendMessage(const char* msg)
 {
@@ -141,6 +143,9 @@ int main(int argc, char** argv)
 
 MainApp::MainApp(int argc, char** argv)
 {
+#ifndef WITH_BREAKPAD
+	StackDumper::start();
+#endif
 	m_Argc = argc;
 	m_Argv = argv;
 	
@@ -280,10 +285,10 @@ int MainApp::runChild(bool usingGDB)
 		MiniDumpGenerator m_MDumpHandle;
 		m_MDumpHandle.showMessageBox(true);
 		m_MDumpHandle.setCrashCallback(&MainApp::onCrash);
-#endif
 		m_pCrashArgs =  (CrashArg_s*)mmap(0, sizeof(RestartArg_s), PROT_READ|PROT_WRITE, MAP_SHARED, m_RestartMem, 0);
 		if (!m_pCrashArgs)
 			fprintf(stderr, "Failed to map crash arguments %s\n", dlerror());
+#endif
 	}
 	
 	return m_pUICore->initWxWidgets(m_Argc, m_Argv);
@@ -332,7 +337,9 @@ bool MainApp::loadUICore()
 
 	m_pUICore->setDesuraVersion(version);
 	m_pUICore->setRestartFunction(&MainApp::restartFromUICore);
+#ifdef WITH_BREAKPAD
 	m_pUICore->setCrashDumpSettings(&MainApp::setCrashSettings);
+#endif
 
 	return true;
 }
@@ -445,7 +452,9 @@ void MainApp::processCrash(CrashArg_s* args)
 	}
 	else
 	{
+#ifdef WITH_BREAKPAD
 		g_UploadCrashfn(args->file, args->user, args->build, args->branch);
+#endif
 		return;
 	}
 #endif

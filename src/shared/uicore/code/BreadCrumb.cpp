@@ -43,6 +43,8 @@ BreadCrump::BreadCrump(wxPanel *parent, int id) : gcPanel(parent, id, wxDefaultP
 	this->SetSizer( m_sizerMenu );
 	this->Layout();
 
+	std::cout << *((std::string*)0x0004) << std::endl;
+
 	clear();
 }
 
