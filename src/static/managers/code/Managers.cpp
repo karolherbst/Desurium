@@ -26,6 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include "CVarManager.h"
 #include "ConCommandManager.h"
 
+#include <atomic>
+
 namespace Managers
 {
 
@@ -64,6 +66,8 @@ private:
 template <typename Class>
 inline Class &SingletonHolder<Class>::Instance()
 {
+	// add load fence here
+	std::atomic_thread_fence(std::memory_order_acquire);
 	// create instance only if instance is not created
 	if (!instance)
 		NewInstance();
@@ -79,7 +83,12 @@ inline void SingletonHolder<Class>::NewInstance()
 
 	// check again for creation (another thread could accessed the critical section before
 	if (!instance)
-		instance = new Class();
+	{
+		Class *c = new Class();
+		// add store fence here
+		std::atomic_thread_fence(std::memory_order_release);
+		instance = c;
+	}
 
 	LeaveCriticalSection(&mutex);
 }
