@@ -84,10 +84,10 @@ inline void SingletonHolder<Class>::NewInstance()
 	// check again for creation (another thread could accessed the critical section before
 	if (!instance)
 	{
-		Class *c = new Class();
+		static Class c;
 		// add store fence here
 		std::atomic_thread_fence(std::memory_order_release);
-		instance = c;
+		instance = &c;
 	}
 
 	LeaveCriticalSection(&mutex);
