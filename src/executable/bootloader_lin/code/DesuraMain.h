@@ -78,8 +78,6 @@ protected:
 	
 	friend bool RestartBootloader(const char* args);
 	
-	bool utf8Test();
-
 	bool loadCrashHelper();
 	void sendArgs();
 	

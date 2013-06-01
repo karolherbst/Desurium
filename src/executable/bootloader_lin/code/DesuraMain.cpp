@@ -24,7 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 #include <fcntl.h>
 #include <unistd.h> // execl(), fork(), getppid()
-#include <sys/types.h> // pid_t
 #include <cstring> // strerror()
 #include <cerrno> // errno
 
@@ -298,9 +297,6 @@ bool MainApp::testDeps()
 
 	dlclose(gtkHandle);
 
-	if (!utf8Test())
-		return false;
-
 	return true;
 }
 
@@ -454,28 +450,6 @@ void MainApp::setUser(const char* user)
 void MainApp::setCrashSettings(const char* user, bool upload)
 {
 	g_pMainApp->setUser(user);
-}
-
-bool MainApp::utf8Test()
-{
-	bool hasUtf8 = false;
-
-	signed char result[PATH_MAX] = {0};
-	ssize_t count = readlink("/proc/self/exe", (char*)result, PATH_MAX);
-
-	for (ssize_t x=0; x<count; x++)
-	{
-		if (result[x] > 0)
-			continue;
-
-		hasUtf8 = true;
-		break;
-	}
-	
-	if (hasUtf8)
-		ShowHelpDialog(PRODUCT_NAME " currently doesnt support running from a directory with UTF8 characters. Please move " PRODUCT_NAME " to a normal directory.", NULL, "--error");
-
-	return !hasUtf8;
 }
 
 bool MainApp::loadCrashHelper()
