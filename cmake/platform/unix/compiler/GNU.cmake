@@ -5,9 +5,9 @@ add_compiler_flags(RELEASE -O2)
 add_compiler_flags(CXX -fpermissive -std=c++0x)
 add_linker_flags(-Wl,--as-needed -Bsymbolic-functions)
 
-if(DEBUG)
+#if(DEBUG)
   add_linker_flags(-rdynamic)
-endif()
+#endif()
 
 set(GCC TRUE)
 
