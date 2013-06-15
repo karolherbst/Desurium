@@ -57,6 +57,7 @@
 # windows-only options:
 #   BOOST_URL                           URL to boost archive
 #   DEBUG_CEF       OFF                 turn on/off debugging in CEF
+#   DEBUG_V8        OFF                 turn on/off debugging in v8
 #
 # some dev notes:
 #
@@ -169,7 +170,7 @@ if(NOT BUILD_ONLY_CEF)
     endif()
   endif()
 
-  find_package(v8 ${REQUIRED_ON_UNIX})
+  find_package(v8 ${REQUIRED_IF_OPTION})
 
   if(NOT FORCE_BUNDLED_WXGTK)
     find_package(wxWidgets 2.9 COMPONENTS richtext ${REQUIRED_IF_OPTION})
@@ -262,6 +263,15 @@ else()
   unset(DEPOT_TOOLS_MD5)
 endif()
 
+set(V8_URL_DEFAULT https://commondatastorage.googleapis.com/chromium-browser-official/v8-3.18.5.14.tar.bz2)
+set(V8_URL ${V8_URL_DEFAULT}
+    CACHE STRING "URL to v8 archive")
+if(V8_URL STREQUAL V8_URL_DEFAULT)
+  set(V8_MD5 657802ea63c89190fd510ee1a2a719bf)
+else()
+  unset(V8_MD5)
+endif()
+
 set(WXWIDGET_URL_DEFAULT http://garr.dl.sourceforge.net/project/wxwindows/2.9.3/wxWidgets-2.9.3.tar.bz2)
 set(WXWIDGET_URL ${WXWIDGET_URL_DEFAULT}
     CACHE STRING "URL to wxWidget 2.9.3 archive")
@@ -270,9 +280,6 @@ if(WXWIDGET_URL STREQUAL WXWIDGET_URL_DEFAULT)
 else()
   unset(WXWIDGET_MD5)
 endif()
-
-# for windows
-set(V8_SVN http://v8.googlecode.com/svn/tags/3.9.15/)
 
 ###############################################################################
 # build some externel projects
