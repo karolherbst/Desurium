@@ -13,7 +13,20 @@
 #include <iostream>
 #include <string>
 
-static StackDumper *sd;
+static StackDumperImpl *sd;
+
+class StackDumperImpl : public StackDumper
+{
+public:
+	virtual void printStackTrace();
+	virtual void printLoadedLibraries();
+	virtual void reload();
+private:
+	const bfd *b;
+	std::map<std::string, LoadedLibrary> libraries;
+
+	std::string getUnknownFunction(const Dl_info& dlinfo, void* address);
+};
 
 struct LoadedLibrary
 {
@@ -23,7 +36,7 @@ struct LoadedLibrary
 	unsigned long end;
 };
 
-std::string StackDumper::getUnknownFunction(const Dl_info& dlinfo, void* address)
+std::string StackDumperImpl::getUnknownFunction(const Dl_info& dlinfo, void* address)
 {
 	long tableSize, numberSymbols;
 	char **matching;
@@ -76,7 +89,7 @@ std::string StackDumper::getUnknownFunction(const Dl_info& dlinfo, void* address
 	return result;
 }
 
-void StackDumper::printStackTrace()
+void StackDumperImpl::printStackTrace()
 {
 	std::cout << std::endl << "SIGSEGV: trying to print stacktrace" << std::endl;
 
@@ -115,7 +128,7 @@ void StackDumper::printStackTrace()
 	}
 }
 
-void StackDumper::printLoadedLibraries()
+void StackDumperImpl::printLoadedLibraries()
 {
 	for (const std::pair<std::string, LoadedLibrary> &p : libraries)
 	{
@@ -139,13 +152,8 @@ void StackDumper::start()
 	signal(SIGSEGV, sigsegvHandler);
 }
 
-StackDumper::StackDumper()
-{
-	
-}
-
 // parse the /proc/self/maps file
-void StackDumper::reload()
+void StackDumperImpl::reload()
 {
 	std::ifstream t("/proc/self/maps");
 	while (!t.eof())

@@ -27,10 +27,12 @@ SERVICE_STATUS_HANDLE g_hStatus;
 
 CGCServiceApp g_ServiceApp;
 
+#ifdef WITH_BREAKPAD
 void SetCrashSettings(const wchar_t* user, bool upload)
 {
 	g_ServiceApp.setCrashSettings(user, upload);
 }
+#endif
 
 void OnPipeDisconnect()
 {

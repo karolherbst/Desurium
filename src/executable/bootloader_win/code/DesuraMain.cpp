@@ -36,7 +36,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #endif
 
 #include "UpdateFunctions.h"
-#include "MiniDumpGenerator.h"
+#ifdef WITH_BREAKPAD
+  #include "MiniDumpGenerator.h"
+#endif
 
 #include <branding/branding.h>
 #include <branding/desura_exe_version.h>
@@ -103,7 +105,9 @@ public:
 	BOOL PreTranslateMessage(MSG *msg);
 	BOOL OnIdle(LONG lCount);
 
+#ifdef WITH_BREAKPAD
 	MiniDumpGenerator m_MDumpHandle;
+#endif
 
 protected:
 	bool sendArgs();
@@ -124,8 +128,11 @@ private:
 
 
 BootLoader theApp;
+#ifdef WITH_BREAKPAD
 bool g_bLockDump = false;
+#endif
 
+#ifdef WITH_BREAKPAD
 void SetDumpArgs(const wchar_t* user, bool upload)
 {
 	theApp.m_MDumpHandle.setUser(user);
@@ -137,11 +144,14 @@ void SetDumpLevel(unsigned char level)
 	if (!g_bLockDump)
 		theApp.m_MDumpHandle.setDumpLevel(level);
 }
+#endif
 
 BootLoader::BootLoader()
 {
+#ifdef WITH_BREAKPAD
 	m_MDumpHandle.showMessageBox(true);
-
+#endif
+	
 	AfxEnableMemoryTracking(FALSE);
 	InitCommonControls();
 
@@ -160,6 +170,7 @@ BootLoader::~BootLoader()
 
 BOOL BootLoader::InitInstance()
 {
+	try {
 	BootLoaderUtil::CMDArgs args(m_lpCmdLine);
 	
 	if (args.hasArg("waitfordebugger"))
@@ -198,13 +209,15 @@ BOOL BootLoader::InitInstance()
 		return FALSE;
 	}
 #endif
-	
+
+#ifdef WITH_BREAKPAD
 	if (args.hasArg("dumplevel"))
 	{
 		SetDumpLevel(args.getInt("dumplevel"));
 		g_bLockDump = true;
 	}
-
+#endif
+	
 	if (args.hasArg("autostart"))
 	{
 		//need to wait for service to start
@@ -380,6 +393,10 @@ BOOL BootLoader::InitInstance()
 		m_pMainWnd = new BootLoaderUtil::CDummyWindow(m_pUICore->getHWND());
 
 	return res?TRUE:FALSE;
+	} catch (std::exception &e) {
+		std::cout << e.what() << std::endl;
+		return FALSE;
+	}
 }
 
 void BootLoader::restartAsAdmin(int needupdate)
@@ -507,8 +524,10 @@ void BootLoader::loadUICore()
 
 	m_pUICore->setDesuraVersion(version);
 	m_pUICore->setRestartFunction(&UiCoreRestart);
+#ifdef WITH_BREAKPAD
 	m_pUICore->setCrashDumpSettings(&SetDumpArgs);
 	m_pUICore->setCrashDumpLevel(&SetDumpLevel);
+#endif
 }
 
 

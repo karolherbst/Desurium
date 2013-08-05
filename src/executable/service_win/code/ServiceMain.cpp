@@ -30,7 +30,9 @@ typedef void* (*FactoryBuilderFN)(const char*);
 bool SetDllPath(const char* wdir);
 uint32 ValidateCert(const wchar_t* pwszSourceFile, char* message, size_t size);
 
+#ifdef WITH_BREAKPAD
 void SetCrashSettings(const wchar_t* user, bool upload);
+#endif
 void OnPipeDisconnect();
 
 
@@ -44,11 +46,13 @@ CGCServiceApp::~CGCServiceApp()
 {
 }
 
+#ifdef WITH_BREAKPAD
 void CGCServiceApp::setCrashSettings(const wchar_t* user, bool upload)
 {
 	m_MiniDump.setUser(user);
 	m_MiniDump.setUpload(upload);
 }
+#endif
 
 bool CGCServiceApp::start(int argc, char** argv)
 {
@@ -107,7 +111,9 @@ bool CGCServiceApp::start(int argc, char** argv)
 	}
 
 	m_pServiceCore->setDisconnectCallback(&OnPipeDisconnect);
+#ifdef WITH_BREAKPAD
 	m_pServiceCore->setCrashSettingCallback(&SetCrashSettings);
+#endif
 	m_pServiceCore->startPipe();
 
     return true;

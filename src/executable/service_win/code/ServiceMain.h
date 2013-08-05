@@ -22,7 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #pragma once
 #endif
 
-#include "MiniDumpGenerator.h"
+#ifdef WITH_BREAKPAD
+  #include "MiniDumpGenerator.h"
+#endif
 #include "SharedObjectLoader.h"
 
 class ServiceCoreI;
@@ -36,7 +38,9 @@ public:
 	bool start(int argc, char** argv);
 	void stop();
  
+#ifdef WITH_BREAKPAD
 	void setCrashSettings(const wchar_t* user, bool upload);
+#endif
 	void onDisconnect();
 
 protected:
@@ -44,7 +48,9 @@ protected:
 
 private:
 	SharedObjectLoader m_SCDLL;
+#ifdef WITH_BREAKPAD
 	MiniDumpGenerator m_MiniDump;
+#endif
 
 	ServiceCoreI *m_pServiceCore;
 

@@ -6,6 +6,12 @@ include_directories(
   ${TINYXML_INCLUDE_DIR}
 )
 
+if(WITH_BREAKPAD)
+  set(MDUMP mdump)
+else()
+  set(MDUMP stackdumper)
+endif()
+
 configure_file(RES/desura_exe.rc ${RC_DIR}/desura_exe.rc @ONLY)
 file(GLOB Sources code/AppUpdateInstall.cpp
                   code/Log.cpp
@@ -34,7 +40,7 @@ target_link_libraries(desura
   util
   util_bootloader
   comctl32
-  mdump
+  ${MDUMP}
 )
 
 install(TARGETS desura

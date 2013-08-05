@@ -6,6 +6,12 @@ include_directories(
   ${BROWSER_PIPE_INCLUDE_DIRS}
 )
 
+if(WITH_BREAKPAD)
+  set(MDUMP mdump)
+else()
+  set(MDUMP stackdumper)
+endif()
+
 configure_file(RES/desura_browserhost.rc ${RC_DIR}/desura_browserhost.rc @ONLY)
 file(GLOB
   Sources code/*.cpp
@@ -20,7 +26,7 @@ add_executable(desura_browserhost WIN32 ${Sources} ${BROWSER_PIPE_SPOURCES})
 target_link_libraries(desura_browserhost
   gcJSBase
   ipc_pipe
-  mdump
+  ${MDUMP}
   msi
   util
   util_fs

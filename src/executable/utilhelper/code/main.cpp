@@ -22,7 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include "resource.h"
 
 #include "UtilBootloader.h"
-#include "MiniDumpGenerator.h"
+#ifdef WITH_BREAKPAD
+  #include "MiniDumpGenerator.h"
+#endif
 
 #include "SharedObjectLoader.h"
 #include "UICoreI.h"
@@ -51,7 +53,9 @@ private:
 	SharedObjectLoader m_hUICore;
 	UICoreI* m_pUICore;
 
+#ifdef WITH_BREAKPAD
 	MiniDumpGenerator m_MDumpHandle;
+#endif
 };
 
 BootLoader theApp;
@@ -60,7 +64,9 @@ BootLoader theApp;
 
 BootLoader::BootLoader()
 {
+#ifdef WITH_BREAKPAD
 	m_MDumpHandle.showMessageBox(true);
+#endif
 
 	AfxEnableMemoryTracking(FALSE);
 	InitCommonControls();
