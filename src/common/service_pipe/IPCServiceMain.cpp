@@ -152,7 +152,9 @@ void IPCServiceMain::registerFunctions()
 	REG_FUNCTION_VOID( IPCServiceMain, dispVersion );
 	
 	REG_FUNCTION_VOID( IPCServiceMain, setAppDataPath );
+#ifdef WITH_BREAKPAD
 	REG_FUNCTION_VOID( IPCServiceMain, setCrashSettings );
+#endif
 
 	REG_FUNCTION_VOID( IPCServiceMain, removeUninstallRegKey);
 	REG_FUNCTION_VOID( IPCServiceMain, setUninstallRegKey);
@@ -272,10 +274,12 @@ void IPCServiceMain::setAppDataPath(const char* path)
 	IPC::functionCallAsync(this, "setAppDataPath", path);
 }
 
+#ifdef WITH_BREAKPAD
 void IPCServiceMain::setCrashSettings(const char* user, bool upload)
 {
 	IPC::functionCallAsync(this, "setCrashSettings", user, upload);
 }
+#endif
 
 void IPCServiceMain::removeUninstallRegKey(uint64 id)
 {
@@ -366,11 +370,13 @@ void IPCServiceMain::setAppDataPath(const char* path)
 	SetAppDataPath(path);
 }
 
+#ifdef WITH_BREAKPAD
 void IPCServiceMain::setCrashSettings(const char* user, bool upload)
 {
 	gcWString wUser(user);
 	SetCrashSettings(wUser.c_str(), upload);
 }
+#endif
 
 void IPCServiceMain::dispVersion()
 {

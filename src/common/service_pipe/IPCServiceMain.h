@@ -72,7 +72,9 @@ public:
 #endif
 
 	void setAppDataPath(const char* path);
+#ifdef WITH_BREAKPAD
 	void setCrashSettings(const char* user, bool upload);
+#endif
 	void dispVersion();
 
 	void fixFolderPermissions(const char* dir);

@@ -24,7 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 #define SERVICE_CORE "service_core_001"
 
+#ifdef WITH_BREAKPAD
 typedef void (*CrashSettingFn)(const wchar_t*, bool);
+#endif
 typedef void (*DisconnectFn)();
 
 //! Service core handles all the tasks that need administraton rights to perform
@@ -47,10 +49,12 @@ public:
 	//!
 	virtual void destroy()=0;
 
+#ifdef WITH_BREAKPAD
 	//! Set the crash settings callback
 	//!
 	virtual void setCrashSettingCallback(CrashSettingFn crashSettingFn)=0;
-	
+#endif
+
 	//! Set the disconnect callback
 	//!
 	virtual void setDisconnectCallback(DisconnectFn disconnectFn)=0;

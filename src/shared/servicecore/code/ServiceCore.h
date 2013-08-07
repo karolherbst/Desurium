@@ -43,11 +43,15 @@ public:
 	virtual bool stopService(const char* serviceName);
 
 	virtual void destroy();
-
+	
+#ifdef WITH_BREAKPAD
 	virtual void setCrashSettingCallback(CrashSettingFn crashSettingFn);
+#endif
 	virtual void setDisconnectCallback(DisconnectFn disconnectFn);
 
+#ifdef WITH_BREAKPAD
 	void setCrashSettings(const wchar_t* user, bool upload);
+#endif
 
 protected:
 	void onDisconnect(uint32 &);
@@ -55,7 +59,9 @@ protected:
 private:
 	IPC::PipeServer *m_pIPCServer;
 
+#ifdef WITH_BREAKPAD
 	CrashSettingFn m_pCrashSetting;
+#endif
 	DisconnectFn m_pDisconnect;
 
 };

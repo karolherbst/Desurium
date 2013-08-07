@@ -89,7 +89,9 @@ void UserIPCPipeClient::start()
 			throw gcException(ERR_IPC, "Failed to create service main");
 
 		m_pServiceMain->dispVersion();
+#ifdef WITH_BREAKPAD
 		m_pServiceMain->setCrashSettings(m_szUser.c_str(), m_bUploadDumps);
+#endif
 		m_pServiceMain->setAppDataPath(m_szAppDataPath.c_str());
 	}
 	catch (gcException &e)
@@ -101,14 +103,6 @@ void UserIPCPipeClient::start()
 
 void UserIPCPipeClient::startService()
 {
-	
-#ifdef DEBUG
-#if 0
-	//servcie started via debugger
-	return;
-#endif
-#endif
-
 	uint32 res = UTIL::WIN::queryService(SERVICE_NAME);
 
 	if (res != SERVICE_STATUS_STOPPED)

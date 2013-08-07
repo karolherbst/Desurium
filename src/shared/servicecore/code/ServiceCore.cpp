@@ -23,12 +23,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 ServiceCore* g_pServiceCore = NULL;
 void StopLogging();
 
+#ifdef WITH_BREAKPAD
 void SetCrashSettings(const wchar_t* user, bool upload)
 {
 	if (g_pServiceCore)
 		g_pServiceCore->setCrashSettings(user, upload);
 }
-
+#endif
 
 
 
@@ -84,21 +85,25 @@ void ServiceCore::destroy()
 	delete this;
 }
 
+#ifdef WITH_BREAKPAD
 void ServiceCore::setCrashSettingCallback(CrashSettingFn crashSettingFn)
 {
 	m_pCrashSetting = crashSettingFn;
 }
+#endif
 
 void ServiceCore::setDisconnectCallback(DisconnectFn disconnectFn)
 {
 	m_pDisconnect = disconnectFn;
 }
 
+#ifdef WITH_BREAKPAD
 void ServiceCore::setCrashSettings(const wchar_t* user, bool upload)
 {
 	if (m_pCrashSetting)
 		m_pCrashSetting(user, upload);
 }
+#endif
 
 void ServiceCore::onDisconnect(uint32 &)
 {
