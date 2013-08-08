@@ -21,7 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include "Common.h"
 #include "IPCPipeServer.h"
 #include "util_thread\BaseThread.h"
-#include "MiniDumpGenerator.h"
+#ifdef WITH_BREAKPAD
+  #include "MiniDumpGenerator.h"
+#endif
 #include "SharedObjectLoader.h"
 
 void PrintfMsg(const char* format, ...)
@@ -128,8 +130,10 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 #endif
 
 #ifndef DEBUG
+#ifdef WITH_BREAKPAD
 	MiniDumpGenerator miniDump;
 	miniDump.showMessageBox(false);
+#endif
 #endif
 
 	BootLoaderUtil::SetCurrentDir();
